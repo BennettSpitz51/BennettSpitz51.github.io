@@ -43,17 +43,28 @@
       bottom: 0;
       width: 100%;
     }
+
+    /* Form Layout */
     form {
       margin-bottom: 2rem;
     }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
     label {
-      display: block;
-      margin-top: 1rem;
       font-weight: bold;
     }
     input, select {
       padding: 0.5rem;
-      margin: 0.5rem 0;
+      margin-top: 0.25rem;
       width: 200px;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -76,6 +87,8 @@
     .action-btn:hover {
       background-color: #d32f2f;
     }
+
+    /* Table */
     table {
       width: 95%;
       margin: 0 auto;
@@ -104,27 +117,42 @@
   <main>
     <h2>Add Income</h2>
     <form id="income-form">
-      <label for="source">Income Source</label>
-      <input type="text" id="source" required />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="source">Income Source</label>
+          <input type="text" id="source" required />
+        </div>
 
-      <label for="amount">Amount ($)</label>
-      <input type="number" id="amount" required />
+        <div class="form-group">
+          <label for="amount">Amount ($)</label>
+          <input type="number" id="amount" required />
+        </div>
 
-      <label for="receivedDate">Received Date</label>
-      <input type="date" id="receivedDate" required />
+        <div class="form-group">
+          <label for="receivedDate">Received Date</label>
+          <input type="date" id="receivedDate" required />
+        </div>
 
-      <label for="frequency">Frequency</label>
-      <select id="frequency" required>
-        <option value="">Select Frequency</option>
-        <option value="One-time">One-time</option>
-        <option value="Per Month">Per Month</option>
-        <option value="Per Year">Per Year</option>
-      </select>
+        <div class="form-group">
+          <label for="frequency">Frequency</label>
+          <select id="frequency" required>
+            <option value="">Select Frequency</option>
+            <option value="One-time">One-time</option>
+            <option value="Per Month">Per Month</option>
+            <option value="Per Year">Per Year</option>
+          </select>
+        </div>
 
-      <label for="endDate">End Date (optional)</label>
-      <input type="date" id="endDate" />
+        <div class="form-group">
+          <label for="endDate">End Date (optional)</label>
+          <input type="date" id="endDate" />
+        </div>
 
-      <button type="submit">Add Income</button>
+        <div class="form-group">
+          <label style="opacity: 0;">Submit</label>
+          <button type="submit">Add Income</button>
+        </div>
+      </div>
     </form>
 
     <h2>Income Sources</h2>
@@ -152,14 +180,12 @@
     const form = document.getElementById('income-form');
     const tableBody = document.querySelector('#income-table tbody');
 
-    // Refs for inputs
+    // Input references
     const sourceInput = document.getElementById('source');
     const amountInput = document.getElementById('amount');
     const receivedInput = document.getElementById('receivedDate');
     const frequencyInput = document.getElementById('frequency');
     const endInput = document.getElementById('endDate');
-
-    let editIndex = null; // track which entry is being edited
 
     function loadIncome() {
       const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
@@ -192,14 +218,12 @@
       const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
       const entry = incomeList[index];
 
-      // Populate form with selected entry
       sourceInput.value = entry.source;
       amountInput.value = entry.amount;
       receivedInput.value = entry.receivedDate;
       frequencyInput.value = entry.frequency;
       endInput.value = entry.endDate;
 
-      // Remove the entry and set edit flag
       incomeList.splice(index, 1);
       localStorage.setItem('incomeList', JSON.stringify(incomeList));
       loadIncome();
@@ -228,11 +252,9 @@
       loadIncome();
     });
 
-    // Expose functions to global scope
     window.deleteIncome = deleteIncome;
     window.editIncome = editIncome;
 
-    // Initial load
     loadIncome();
   </script>
 </body>
