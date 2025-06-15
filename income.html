@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Assuming the dashboard page uses styles.css -->
+    <script defer src="income.js"></script>
+</head>
+<body>
+    <header class="header">
+        <h1>Income Tracker</h1>
+        <nav class="menu">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="income.html" class="active">Income</a></li>
+                <li><a href="expenses.html">Expenses</a></li>
+                <li><a href="reports.html">Reports</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="add-income">
+            <h2>Add Income</h2>
+            <form id="income-form">
+                <label for="income-source">Income Source:</label>
+                <input type="text" id="income-source" name="income-source" required>
+
+                <label for="income-amount">Amount ($):</label>
+                <input type="number" id="income-amount" name="income-amount" step="0.01" required>
+
+                <label for="income-frequency">Frequency:</label>
+                <select id="income-frequency" name="income-frequency" required>
+                    <option value="monthly">Per Month</option>
+                    <option value="yearly">Per Year</option>
+                    <option value="one-time">One Time</option>
+                </select>
+
+                <label for="income-category">Category:</label>
+                <select id="income-category" name="income-category" required>
+                    <option value="wage">Wage</option>
+                    <option value="gift">Gift</option>
+                    <option value="stipend">Stipend</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <button type="submit">Add Income</button>
+            </form>
+        </section>
+
+        <section id="income-list">
+            <h2>Saved Incomes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Amount ($)</th>
+                        <th>Frequency</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="income-table-body">
+                    <!-- Dynamic rows will be added here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
