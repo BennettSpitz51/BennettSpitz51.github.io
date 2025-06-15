@@ -178,40 +178,99 @@
 
   <script>
     const form = document.getElementById('income-form');
-  
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-  
-      const source = document.getElementById('source').value.trim();
-      const amount = document.getElementById('amount').value.trim();
-      const receivedDate = document.getElementById('receivedDate').value;
-      const frequency = document.getElementById('frequency').value;
-      const endDate = document.getElementById('endDate').value;
-  
-      if (!source || !amount || isNaN(amount) || !receivedDate || !frequency) {
-        alert("Please fill out all required fields.");
-        return;
-      }
-  
-      const formData = `source=${encodeURIComponent(source)}&amount=${encodeURIComponent(amount)}&receivedDate=${encodeURIComponent(receivedDate)}&frequency=${encodeURIComponent(frequency)}&endDate=${encodeURIComponent(endDate)}`;
-  
-      fetch("https://script.google.com/macros/s/AKfycbw20-Q-YaJvTv4YKkWqINQoNaqAs8_ebJdl_1f_5znnJjwcpm_CCSgug1qpFGY-0mq4/exec", {
+    const tableBody = document.querySelector('#income-table tbody');
+
+    // Input references
+    const sourceInput = document.getElementById('source');
+    const amountInput = document.getElementById('amount');
+    const receivedInput = document.getElementById('receivedDate');
+    const frequencyInput = document.getElementById('frequency');
+    const endInput = document.getElementById('endDate');
+
+    function loadIncome() {
+      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
+      tableBody.innerHTML = '';
+      incomeList.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${entry.source}</td>
+          <td>$${parseFloat(entry.amount).toFixed(2)}</td>
+          <td>${entry.receivedDate || '-'}</td>
+          <td>${entry.frequency || '-'}</td>
+          <td>${entry.endDate || '-'}</td>
+          <td>
+            <button onclick="editIncome(${index})">Edit</button>
+            <button class="action-btn" onclick="deleteIncome(${index})">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function deleteIncome(index) {
+      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
+      incomeList.splice(index, 1);
+      localStorage.setItem('incomeList', JSON.stringify(incomeList));
+      loadIncome();
+    }
+
+    function editIncome(index) {
+      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
+      const entry = incomeList[index];
+
+      sourceInput.value = entry.source;
+      amountInput.value = entry.amount;
+      receivedInput.value = entry.receivedDate;
+      frequencyInput.value = entry.frequency;
+      endInput.value = entry.endDate;
+
+      incomeList.splice(index, 1);
+      localStorage.setItem('incomeList', JSON.stringify(incomeList));
+      loadIncome();
+    }
+
+    function sendData(word) {
+
+      fetch("https://script.google.com/macros/s/AKfycbwOQ8vZ2yXPf7nWs4lv4KlNW0QuHKP2wsibUSjzIdQvcyqHqC0E6oiHuRWnFaoV7xI2/exec", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: formData
+        body: "word=" + encodeURIComponent(word)
       })
       .then(response => response.text())
-      .then(data => {
-        alert("Income submitted!");
-        form.reset();
-      })
-      .catch(error => {
-        alert("Error: " + error);
-        console.error(error);
-      });
+      .then(data => alert("Response: " + data))
+      .catch(error => alert("Error: " + error));
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const source = sourceInput.value.trim();
+      const amount = amountInput.value.trim();
+      const receivedDate = receivedInput.value;
+      const frequency = frequencyInput.value;
+      const endDate = endInput.value;
+
+      if (!source || !amount || isNaN(amount) || !receivedDate || !frequency) {
+        alert("Please fill out all required fields.");
+        return;
+      }
+
+      const newIncome = { source, amount, receivedDate, frequency, endDate };
+      sendData(newIncome.source);
+      sendData(newIncome.amount);
+      sendData(newIncome.receivedDate);
+      sendData(newIncome.frequency);
+      sendData(newIncome.endDate);
+      form.reset();
+      loadIncome();
     });
+
+    window.deleteIncome = deleteIncome;
+    window.editIncome = editIncome;
+
+    loadIncome();
   </script>
 </body>
 </html>
