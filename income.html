@@ -168,7 +168,9 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Entries inserted here -->
+        <tr>
+          <td colspan="6">Income submissions will be saved to Google Sheets but not displayed here yet.</td>
+        </tr>
       </tbody>
     </table>
   </main>
@@ -180,56 +182,15 @@
     const form = document.getElementById('income-form');
     const tableBody = document.querySelector('#income-table tbody');
 
-    // Input references
     const sourceInput = document.getElementById('source');
     const amountInput = document.getElementById('amount');
     const receivedInput = document.getElementById('receivedDate');
     const frequencyInput = document.getElementById('frequency');
     const endInput = document.getElementById('endDate');
 
-    function loadIncome() {
-      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
-      tableBody.innerHTML = '';
-      incomeList.forEach((entry, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${entry.source}</td>
-          <td>$${parseFloat(entry.amount).toFixed(2)}</td>
-          <td>${entry.receivedDate || '-'}</td>
-          <td>${entry.frequency || '-'}</td>
-          <td>${entry.endDate || '-'}</td>
-          <td>
-            <button onclick="editIncome(${index})">Edit</button>
-            <button class="action-btn" onclick="deleteIncome(${index})">Delete</button>
-          </td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw20-Q-YaJvTv4YKkWqINQoNaqAs8_ebJdl_1f_5znnJjwcpm_CCSgug1qpFGY-0mq4/exec';
 
-    function deleteIncome(index) {
-      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
-      incomeList.splice(index, 1);
-      localStorage.setItem('incomeList', JSON.stringify(incomeList));
-      loadIncome();
-    }
-
-    function editIncome(index) {
-      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
-      const entry = incomeList[index];
-
-      sourceInput.value = entry.source;
-      amountInput.value = entry.amount;
-      receivedInput.value = entry.receivedDate;
-      frequencyInput.value = entry.frequency;
-      endInput.value = entry.endDate;
-
-      incomeList.splice(index, 1);
-      localStorage.setItem('incomeList', JSON.stringify(incomeList));
-      loadIncome();
-    }
-
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const source = sourceInput.value.trim();
@@ -243,19 +204,38 @@
         return;
       }
 
-      const newIncome = { source, amount, receivedDate, frequency, endDate };
-      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
-      incomeList.push(newIncome);
-      localStorage.setItem('incomeList', JSON.stringify(incomeList));
+      const newIncome = {
+        source,
+        amount,
+        receivedDate,
+        frequency,
+        endDate
+      };
 
-      form.reset();
-      loadIncome();
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newIncome)
+        });
+
+        const result = await res.json();
+        if (result.status === 'success') {
+          alert('Income saved successfully!');
+          form.reset();
+        } else {
+          alert('Failed to save income. Try again.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error submitting income.');
+      }
     });
 
-    window.deleteIncome = deleteIncome;
-    window.editIncome = editIncome;
-
-    loadIncome();
+    tableBody.innerHTML = '<tr><td colspan="6">Income submissions will be saved to Google Sheets but not displayed here yet.</td></tr>';
   </script>
 </body>
 </html>
