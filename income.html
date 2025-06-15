@@ -44,7 +44,6 @@
       width: 100%;
     }
 
-    /* Form Layout */
     form {
       margin-bottom: 2rem;
     }
@@ -88,7 +87,6 @@
       background-color: #d32f2f;
     }
 
-    /* Table */
     table {
       width: 95%;
       margin: 0 auto;
@@ -177,17 +175,17 @@
   </footer>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbz_IKAmln5SFI8dz1Tr5Sqa132HsxiH_NfLMJDcdPg/exec';
-  
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz_IKAmln5SFI8dz1Tr5Sqa132HsxiH_NfLMJDcdPg/exec'; // Replace with your actual URL
+
     const form = document.getElementById('income-form');
     const tableBody = document.querySelector('#income-table tbody');
-  
+
     const sourceInput = document.getElementById('source');
     const amountInput = document.getElementById('amount');
     const receivedInput = document.getElementById('receivedDate');
     const frequencyInput = document.getElementById('frequency');
     const endInput = document.getElementById('endDate');
-  
+
     function loadIncome() {
       fetch(API_URL)
         .then(response => response.json())
@@ -210,10 +208,10 @@
           });
         });
     }
-  
+
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-  
+
       const newIncome = {
         source: sourceInput.value.trim(),
         amount: amountInput.value.trim(),
@@ -221,7 +219,7 @@
         frequency: frequencyInput.value,
         endDate: endInput.value
       };
-  
+
       fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify(newIncome),
@@ -235,7 +233,7 @@
         loadIncome();
       });
     });
-  
+
     loadIncome();
   </script>
 </body>
