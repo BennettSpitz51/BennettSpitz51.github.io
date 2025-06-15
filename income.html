@@ -107,7 +107,7 @@
 </head>
 <body>
   <header>
-    <h1>Income2</h1>
+    <h1>Income3</h1>
   </header>
   <nav>
     <a href="index.html">Dashboard</a>
@@ -180,62 +180,41 @@
 
   <script>
     const form = document.getElementById('income-form');
-    const tableBody = document.querySelector('#income-table tbody');
-
-    const sourceInput = document.getElementById('source');
-    const amountInput = document.getElementById('amount');
-    const receivedInput = document.getElementById('receivedDate');
-    const frequencyInput = document.getElementById('frequency');
-    const endInput = document.getElementById('endDate');
-
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw20-Q-YaJvTv4YKkWqINQoNaqAs8_ebJdl_1f_5znnJjwcpm_CCSgug1qpFGY-0mq4/exec';
-
-    form.addEventListener('submit', async function (e) {
+  
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
-
-      const source = sourceInput.value.trim();
-      const amount = amountInput.value.trim();
-      const receivedDate = receivedInput.value;
-      const frequency = frequencyInput.value;
-      const endDate = endInput.value;
-
+  
+      const source = document.getElementById('source').value.trim();
+      const amount = document.getElementById('amount').value.trim();
+      const receivedDate = document.getElementById('receivedDate').value;
+      const frequency = document.getElementById('frequency').value;
+      const endDate = document.getElementById('endDate').value;
+  
       if (!source || !amount || isNaN(amount) || !receivedDate || !frequency) {
         alert("Please fill out all required fields.");
         return;
       }
-
-      const newIncome = {
-        source,
-        amount,
-        receivedDate,
-        frequency,
-        endDate
-      };
-
-      try {
-        const res = await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(newIncome)
-        });
-
-        const result = await res.json();
-        if (result.status === 'success') {
-          alert('Income saved successfully!');
-          form.reset();
-        } else {
-          alert('Failed to save income. Try again.');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Error submitting income.');
-      }
+  
+      const formData = `source=${encodeURIComponent(source)}&amount=${encodeURIComponent(amount)}&receivedDate=${encodeURIComponent(receivedDate)}&frequency=${encodeURIComponent(frequency)}&endDate=${encodeURIComponent(endDate)}`;
+  
+      fetch("https://script.google.com/macros/s/AKfycbw20-Q-YaJvTv4YKkWqINQoNaqAs8_ebJdl_1f_5znnJjwcpm_CCSgug1qpFGY-0mq4/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+        alert("Income submitted!");
+        form.reset();
+      })
+      .catch(error => {
+        alert("Error: " + error);
+        console.error(error);
+      });
     });
-
-    tableBody.innerHTML = '<tr><td colspan="6">Income submissions will be saved to Google Sheets but not displayed here yet.</td></tr>';
   </script>
+  
 </body>
 </html>
