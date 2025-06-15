@@ -177,84 +177,65 @@
   </footer>
 
   <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz_IKAmln5SFI8dz1Tr5Sqa132HsxiH_NfLMJDcdPg/exec';
+  
     const form = document.getElementById('income-form');
     const tableBody = document.querySelector('#income-table tbody');
-
-    // Input references
+  
     const sourceInput = document.getElementById('source');
     const amountInput = document.getElementById('amount');
     const receivedInput = document.getElementById('receivedDate');
     const frequencyInput = document.getElementById('frequency');
     const endInput = document.getElementById('endDate');
-
+  
     function loadIncome() {
-      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
-      tableBody.innerHTML = '';
-      incomeList.forEach((entry, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${entry.source}</td>
-          <td>$${parseFloat(entry.amount).toFixed(2)}</td>
-          <td>${entry.receivedDate || '-'}</td>
-          <td>${entry.frequency || '-'}</td>
-          <td>${entry.endDate || '-'}</td>
-          <td>
-            <button onclick="editIncome(${index})">Edit</button>
-            <button class="action-btn" onclick="deleteIncome(${index})">Delete</button>
-          </td>
-        `;
-        tableBody.appendChild(row);
-      });
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+          tableBody.innerHTML = '';
+          data.forEach((entry, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${entry.Source}</td>
+              <td>$${parseFloat(entry.Amount).toFixed(2)}</td>
+              <td>${entry.ReceivedDate || '-'}</td>
+              <td>${entry.Frequency || '-'}</td>
+              <td>${entry.EndDate || '-'}</td>
+              <td>
+                <button disabled>Edit</button>
+                <button disabled class="action-btn">Delete</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        });
     }
-
-    function deleteIncome(index) {
-      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
-      incomeList.splice(index, 1);
-      localStorage.setItem('incomeList', JSON.stringify(incomeList));
-      loadIncome();
-    }
-
-    function editIncome(index) {
-      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
-      const entry = incomeList[index];
-
-      sourceInput.value = entry.source;
-      amountInput.value = entry.amount;
-      receivedInput.value = entry.receivedDate;
-      frequencyInput.value = entry.frequency;
-      endInput.value = entry.endDate;
-
-      incomeList.splice(index, 1);
-      localStorage.setItem('incomeList', JSON.stringify(incomeList));
-      loadIncome();
-    }
-
+  
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-
-      const source = sourceInput.value.trim();
-      const amount = amountInput.value.trim();
-      const receivedDate = receivedInput.value;
-      const frequency = frequencyInput.value;
-      const endDate = endInput.value;
-
-      if (!source || !amount || isNaN(amount) || !receivedDate || !frequency) {
-        alert("Please fill out all required fields.");
-        return;
-      }
-
-      const newIncome = { source, amount, receivedDate, frequency, endDate };
-      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
-      incomeList.push(newIncome);
-      localStorage.setItem('incomeList', JSON.stringify(incomeList));
-
-      form.reset();
-      loadIncome();
+  
+      const newIncome = {
+        source: sourceInput.value.trim(),
+        amount: amountInput.value.trim(),
+        receivedDate: receivedInput.value,
+        frequency: frequencyInput.value,
+        endDate: endInput.value
+      };
+  
+      fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify(newIncome),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(result => {
+        form.reset();
+        loadIncome();
+      });
     });
-
-    window.deleteIncome = deleteIncome;
-    window.editIncome = editIncome;
-
+  
     loadIncome();
   </script>
 </body>
