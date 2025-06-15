@@ -107,7 +107,7 @@
 </head>
 <body>
   <header>
-    <h1>Income2</h1>
+    <h1>Income</h1>
   </header>
   <nav>
     <a href="index.html">Dashboard</a>
@@ -229,18 +229,6 @@
       loadIncome();
     }
 
-    function sendData(word) {
-
-      fetch("https://script.google.com/macros/s/AKfycbwsME-rJRZHwEBXyiKQgAxMInJFeWn1BqVCqdGAzS8ydxjH0-eigw9My_NAo6cPSO_6/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "word=" + encodeURIComponent(word)
-      })
-      .catch(error => alert("Error: " + error));
-    }
-
     form.addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -256,11 +244,10 @@
       }
 
       const newIncome = { source, amount, receivedDate, frequency, endDate };
-      sendData(newIncome.source);
-      sendData(newIncome.amount);
-      sendData(newIncome.receivedDate);
-      sendData(newIncome.frequency);
-      sendData(newIncome.endDate);
+      const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
+      incomeList.push(newIncome);
+      localStorage.setItem('incomeList', JSON.stringify(incomeList));
+
       form.reset();
       loadIncome();
     });
