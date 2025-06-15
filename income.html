@@ -238,8 +238,6 @@
         },
         body: "word=" + encodeURIComponent(word)
       })
-      .then(response => response.text())
-      .then(data => alert("Response: " + data))
       .catch(error => alert("Error: " + error));
     }
 
