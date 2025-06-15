@@ -4,68 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Assuming the dashboard page uses styles.css -->
-    <script defer src="income.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem 0;
+        }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 0.5rem 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 2rem;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        form {
+            margin-bottom: 2rem;
+        }
+        input[type="text"],
+        input[type="number"] {
+            padding: 0.5rem;
+            margin: 0.5rem;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <h1>Income Tracker</h1>
-        <nav class="menu">
-            <ul>
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="income.html" class="active">Income</a></li>
-                <li><a href="expenses.html">Expenses</a></li>
-                <li><a href="reports.html">Reports</a></li>
-            </ul>
-        </nav>
+    <header>
+        <h1>Income</h1>
     </header>
-
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="expenses.html">Expenses</a>
+        <a href="income.html">Income</a>
+    </nav>
     <main>
-        <section id="add-income">
-            <h2>Add Income</h2>
-            <form id="income-form">
-                <label for="income-source">Income Source:</label>
-                <input type="text" id="income-source" name="income-source" required>
+        <h2>Add Income</h2>
+        <form id="income-form">
+            <input type="text" id="source" placeholder="Income Source" required>
+            <input type="number" id="amount" placeholder="Amount ($)" required>
+            <button type="submit">Add Income</button>
+        </form>
 
-                <label for="income-amount">Amount ($):</label>
-                <input type="number" id="income-amount" name="income-amount" step="0.01" required>
-
-                <label for="income-frequency">Frequency:</label>
-                <select id="income-frequency" name="income-frequency" required>
-                    <option value="monthly">Per Month</option>
-                    <option value="yearly">Per Year</option>
-                    <option value="one-time">One Time</option>
-                </select>
-
-                <label for="income-category">Category:</label>
-                <select id="income-category" name="income-category" required>
-                    <option value="wage">Wage</option>
-                    <option value="gift">Gift</option>
-                    <option value="stipend">Stipend</option>
-                    <option value="other">Other</option>
-                </select>
-
-                <button type="submit">Add Income</button>
-            </form>
-        </section>
-
-        <section id="income-list">
-            <h2>Saved Incomes</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Source</th>
-                        <th>Amount ($)</th>
-                        <th>Frequency</th>
-                        <th>Category</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="income-table-body">
-                    <!-- Dynamic rows will be added here -->
-                </tbody>
-            </table>
-        </section>
+        <h2>Income Sources</h2>
+        <table id="income-table">
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Amount ($)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Income rows will go here -->
+            </tbody>
+        </table>
     </main>
+    <footer>
+        <p>&copy; 2023 Bennett Spitz. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('income-form');
+        const sourceInput = document.getElementById('source');
+        const amountInput = document.getElementById('amount');
+        const tableBody = document.querySelector('#income-table tbody');
+
+        // Load income entries from localStorage
+        function loadIncome() {
+            const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
+            tableBody.innerHTML = '';
+            incomeList.forEach(entry => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${entry.source}</td><td>$${parseFloat(entry.amount).toFixed(2)}</td>`;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Add new income entry
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const source = sourceInput.value.trim();
+            const amount = amountInput.value.trim();
+
+            if (source && amount && !isNaN(amount)) {
+                const newIncome = { source, amount };
+                const incomeList = JSON.parse(localStorage.getItem('incomeList')) || [];
+                incomeList.push(newIncome);
+                localStorage.setItem('incomeList', JSON.stringify(incomeList));
+                loadIncome();
+                form.reset();
+            }
+        });
+
+        // Initial load
+        loadIncome();
+    </script>
 </body>
 </html>
