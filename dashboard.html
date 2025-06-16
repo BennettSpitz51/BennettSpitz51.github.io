@@ -1,83 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-            text-align: center;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 1rem 0;
-        }
-        nav {
-            background-color: #333;
-            color: white;
-            padding: 0.5rem 0;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 1rem;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        main {
-            padding: 2rem;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        .button-container {
-            margin: 1rem 0;
-        }
-        .button-container button {
-            padding: 0.5rem 1rem;
-            margin: 0.5rem;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button-container button:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+      text-align: center;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 1rem 0;
+    }
+    nav {
+      background-color: #333;
+      color: white;
+      padding: 0.5rem 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 2rem;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 1rem 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .button-container {
+      margin: 1rem 0;
+    }
+    .button-container button {
+      padding: 0.5rem 1rem;
+      margin: 0.5rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button-container button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Dashboard</h1>
-    </header>
-    <nav>
-        <a href="index.html">Dashboard</a>
-        <a href="expenses.html">Expenses</a>
-        <a href="income.html">Income</a>
-    </nav>
-    <main>
-        <p>Welcome to your budget dashboard. Manage your finances efficiently!</p>
-        <div class="button-container">
-            <button onclick="location.href='expenses.html'">Add Expenses</button>
-            <button onclick="location.href='income.html'">Add Income</button>
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2023 Bennett Spitz. All rights reserved.</p>
-    </footer>
+  <header>
+    <h1>Dashboard</h1>
+  </header>
+  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="expenses.html">Expenses</a>
+    <a href="income.html">Income</a>
+  </nav>
+  <main>
+    <p>Welcome to your budget dashboard. Manage your finances efficiently!</p>
+    <div class="button-container">
+      <button onclick="location.href='expenses.html'">Add Expenses</button>
+      <button onclick="location.href='income.html'">Add Income</button>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2023 Bennett Spitz. All rights reserved.</p>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-_h7xomojzMoLgOYHqjEtGwx5RKM7Z6I",
+      authDomain: "bands-budget.firebaseapp.com",
+      databaseURL: "https://bands-budget-default-rtdb.firebaseio.com",
+      projectId: "bands-budget",
+      storageBucket: "bands-budget.firebasestorage.app",
+      messagingSenderId: "855023451133",
+      appId: "1:855023451133:web:bd3e4470efab7b4e687794",
+      measurementId: "G-7G0H09R2E3"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+
+    // Initialize Firestore
+    const db = firebase.firestore();
+  </script>
 </body>
 </html>
