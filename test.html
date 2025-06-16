@@ -4,7 +4,7 @@
   <title>Send to Google Sheet</title>
 </head>
 <body>
-  <h2>Send a Word to Google Sheet 3</h2>
+  <h2>Send a Word to Google Sheet 4</h2>
   <input type="text" id="wordInput" placeholder="Enter a word" />
   <button onclick="sendData()">Send</button>
 
@@ -19,9 +19,6 @@
         },
         body: "word=" + encodeURIComponent(word)
       })
-      .then(response => response.text())
-      .then(data => alert("Response: " + data))
-      .catch(error => alert("Error: " + error));
     }
   </script>
 </body>
