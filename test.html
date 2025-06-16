@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Send to Google Sheet</title>
+  <title>Send 5 Words</title>
 </head>
 <body>
-  <h2>Send a Word to Google Sheet</h2>
-  <input type="text" id="wordInput" placeholder="Enter a word" />
-  <button onclick="sendData()">Send</button>
+  <h2>Send 5 Words to Google Sheet</h2>
+  <form id="wordForm">
+    <input type="text" id="word1" placeholder="Word 1" required><br><br>
+    <input type="text" id="word2" placeholder="Word 2" required><br><br>
+    <input type="text" id="word3" placeholder="Word 3" required><br><br>
+    <input type="text" id="word4" placeholder="Word 4" required><br><br>
+    <input type="text" id="word5" placeholder="Word 5" required><br><br>
+    <button type="submit">Send Words</button>
+  </form>
 
   <script>
-    function sendData() {
-      const word = document.getElementById("wordInput").value;
+    const form = document.getElementById("wordForm");
 
-      fetch("https://script.google.com/macros/s/AKfycbwvduAFQPIO6BL0AuAxLorogpSBCWUwOWHVfcbQ8rutv9atfoFoZDBwohiIxm4jR6o8/exec", {
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const url = "https://script.google.com/macros/s/AKfycbwvduAFQPIO6BL0AuAxLorogpSBCWUwOWHVfcbQ8rutv9atfoFoZDBwohiIxm4jR6o8/exec"; // replace with your actual URL
+
+      const data = new URLSearchParams();
+      data.append("word1", document.getElementById("word1").value);
+      data.append("word2", document.getElementById("word2").value);
+      data.append("word3", document.getElementById("word3").value);
+      data.append("word4", document.getElementById("word4").value);
+      data.append("word5", document.getElementById("word5").value);
+
+      fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: "word=" + encodeURIComponent(word)
+        body: data.toString()
       })
       .then(response => response.text())
-      .then(data => alert("Response: " + data))
+      .then(result => alert("Response: " + result))
       .catch(error => alert("Error: " + error));
-    }
+    });
   </script>
 </body>
 </html>
