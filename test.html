@@ -4,7 +4,7 @@
   <title>Send to Google Sheet</title>
 </head>
 <body>
-  <h2>Send a Word to Google Sheet 4</h2>
+  <h2>Send a Word to Google Sheet 5</h2>
   <input type="text" id="wordInput" placeholder="Enter a word" />
   <button onclick="sendData()">Send</button>
 
@@ -12,7 +12,7 @@
     function sendData() {
       const word = document.getElementById("wordInput").value;
 
-      fetch("https://script.google.com/macros/s/AKfycbww5gl1G2H2jkxGFalR7sqJVu8_YLOUdE8MPRk6msXmzKTyMTPyt7oCi-cKKRtZ5uOg/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwvduAFQPIO6BL0AuAxLorogpSBCWUwOWHVfcbQ8rutv9atfoFoZDBwohiIxm4jR6o8/exec", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
