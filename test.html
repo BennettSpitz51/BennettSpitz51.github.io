@@ -4,7 +4,7 @@
   <title>Send 5 Words</title>
 </head>
 <body>
-  <h2>Send 5 Words to Google Sheet 2</h2>
+  <h2>Send 5 Words to Google Sheet 3</h2>
   <form id="wordForm">
     <input type="text" id="word1" placeholder="Word 1" required><br><br>
     <input type="text" id="word2" placeholder="Word 2" required><br><br>
@@ -20,7 +20,7 @@
     form.addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const url = "https://script.google.com/macros/library/d/1CS5QAksuO9XQSB1XeOJN3uoH0XutfGccADvEF03CAzGXX4KPoE_w6ZTw/7"; // replace with your actual URL
+      const url = "https://script.google.com/macros/s/AKfycbwvduAFQPIO6BL0AuAxLorogpSBCWUwOWHVfcbQ8rutv9atfoFoZDBwohiIxm4jR6o8/exec"; // replace with your actual URL
 
       const data = new URLSearchParams();
       data.append("word1", document.getElementById("word1").value);
